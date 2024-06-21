@@ -1,0 +1,69 @@
+import React from 'react';
+import {  Box, Card, CardContent, Typography,  List, ListItem, ListItemText } from '@mui/material';
+import { Order } from './OrderList';
+
+type OrderComponentProps = {
+    order: Order;
+};
+
+const OrderComponent = (props: OrderComponentProps) => {
+    const {order} = props;
+
+    return (
+        <Card key={order.orderId} variant="outlined" style={{ margin: '20px 0px' }}>
+          <CardContent>
+            <Typography variant="h5">Order ID: {order.orderId}</Typography>
+            <Typography variant="body1">Status: {order.status}</Typography>
+            <Typography variant="body1">Created At: {new Date(order.createdAt).toLocaleString()}</Typography>
+            <Typography variant="body1">Updated At: {new Date(order.updatedAt).toLocaleString()}</Typography>
+            <Typography variant="h6">Total: ${order.total.toFixed(2)}</Typography>
+
+            {order.items.length > 0 && (<Box mt={2}>
+              <Typography variant="h6">Items:</Typography>
+              {order.items.map((item, index) => (
+                <Card key={index} variant="outlined" style={{ marginBottom: '10px' }}>
+                  <CardContent>
+                    <Box display="flex" alignItems="center">
+                        <img src={item.photo} alt={item.name} style={{ height: '30px', objectFit: 'contain' }} />
+                        <Box ml={2}>
+                          <Typography variant="h6">{item.name}</Typography>
+                          <Typography variant="body1">Price: ${item.price}</Typography>
+                          <Typography variant="body1">Quantity: {item.quantity}</Typography>
+                          <Typography variant="body1">Description: {item.description}</Typography>
+                        </Box>
+                    </Box>
+
+                    {item.recipients.length > 0 && (
+                      <Box mt={2}>
+                        <Typography variant="h6">Recipients:</Typography>
+                        <List>
+                          {item.recipients.map((recipient, recipientIndex) => (
+                            <ListItem key={recipientIndex} style={{ paddingLeft: '0' }}>
+                              <ListItemText
+                                primary={`${recipient.firstName} ${recipient.lastName}`}
+                                secondary={
+                                  <>
+                                    <Typography variant="body2">Email: {recipient.email}</Typography>
+                                    <Typography variant="body2">Message: {recipient.message}</Typography>
+                                    {recipient.deliveryScheduledAtTimestamp && (<Typography variant="body2">
+                                      Delivery Scheduled At: {new Date(parseInt(recipient.deliveryScheduledAtTimestamp)).toLocaleString()}
+                                    </Typography>)}
+                                    <Typography variant="body2">Claim Link: <a href={recipient.claimLink} target="_blank" rel="noopener noreferrer">Claim Here</a></Typography>
+                                  </>
+                                }
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>)}
+          </CardContent>
+        </Card>
+    )
+};
+
+export default OrderComponent;
