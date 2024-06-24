@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Grid, Card, CardContent, Typography, CircularProgress, Box } from '@mui/material';
+import { parseDemoninations } from '../../utilities';
 
 export type Product = {
   id: number;
@@ -62,7 +63,7 @@ const ProductList: React.FC = () => {
                 <Typography variant="body2" color="textSecondary">
                   {product.description}
                 </Typography>
-                <Typography variant="h6" my={1}>${product.denominations.toString().replace(',', ' - $')}</Typography>
+                <Typography variant="h6" my={1}>${parseDemoninations(product.denominations, product.denominationType)}</Typography>
               </CardContent>
             </Card>
           </Grid>

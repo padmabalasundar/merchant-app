@@ -8,7 +8,7 @@ const ORDER_PAYLOAD = {
     items: [
       {
         price: 5,
-        productId: "PANERA",
+        productId: "ABERCROMB",
         recipients: [
           {
             email: "testcydev_2@yahoo.com",
@@ -16,9 +16,22 @@ const ORDER_PAYLOAD = {
             lastName: "User"
           }
         ],
-        //deliveryScheduledAtTimestamp: "1718130600000",
+        // deliveryScheduledAtTimestamp: "1732905000000", // Fri Nov 29 2024 18:30:00 UTC
         message: "Best Wishes!"
-      }
+      },
+      // {
+      //   price: 25,
+      //   productId: "1800PETSUP",
+      //   recipients: [
+      //     {
+      //       email: "testcydev@yahoo.com",
+      //       firstName: "Yahoo",
+      //       lastName: "User"
+      //     }
+      //   ],
+      //   // deliveryScheduledAtTimestamp: "1718130600000", // Tue Jun 11 2024 18:30:00 UTC
+      //   message: "Congrats!"
+      // }
     ]
   };
 

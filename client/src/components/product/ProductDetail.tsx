@@ -9,6 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Product } from ".";
+import { parseDemoninations } from "../../utilities";
 
 const ProductDetail: React.FC = () => {
   const { encodedId } = useParams<{ encodedId: string }>();
@@ -52,10 +53,12 @@ const ProductDetail: React.FC = () => {
         />
         <CardContent>
           <Typography variant="h4">{product.name}</Typography>
+          
+          <Typography variant="h6" my={1}>Product Id: {product.id}</Typography>
           <Typography variant="body2" color="textSecondary">
             {product.description}
           </Typography>
-          <Typography variant="h6">${product.denominations.toString().replace(',',' - $')}</Typography>
+          <Typography variant="h6">${parseDemoninations(product.denominations, product.denominationType)}</Typography>
         </CardContent>
       </Card>
     </Container>
