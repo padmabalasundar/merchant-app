@@ -16,8 +16,6 @@ const ProductDetail: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const image = product?.media.faceplates[0].path;
-
   useEffect(() => {
     fetchProduct();
   }, [encodedId]);
@@ -47,7 +45,7 @@ const ProductDetail: React.FC = () => {
     <Container>
       <Card style={{margin: '20px 0px'}}>
         <img
-          src={image}
+          src={product?.media.photo}
           alt={product.name}
           style={{ height: "300px", objectFit: "contain", margin: "20px" }}
         />

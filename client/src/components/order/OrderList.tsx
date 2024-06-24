@@ -27,7 +27,12 @@ export type Recipient = {
     createdAt: string; // ISO date string
     items: OrderItem[];
     orderId: number;
-    status: "PENDING" | "COMPLETED" | "CANCELED" | 'SCHEDULED'; // Define possible status values
+    status: "PENDING" | "COMPLETED" | "CANCELED" | 'SCHEDULED';
+    orderFailureReason: 'GIFT_CARD_ORDER_FAILURE' |
+    'PAYMENT_FAILURE' |
+    'FRAUD' |
+    'INTERNAL_FAILURE';
+    orderType: 'GIFT_CARD_PURCHASE' | 'GIFT_CARD_PURCHASE_WITH_API' | 'SUBSCRIPTION' | 'CARDMOOLA_FUNDS';
     total: number;
     updatedAt: string; // ISO date string
   }

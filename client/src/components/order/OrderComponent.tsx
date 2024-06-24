@@ -14,10 +14,14 @@ const OrderComponent = (props: OrderComponentProps) => {
         <Card key={order.orderId} variant="outlined" style={{ margin: '20px 0px' }}>
           <CardContent>
             <Typography variant="h5">Order ID: {order.orderId}</Typography>
-            <Typography variant="body1">Status: {order.status}</Typography>
+            <Typography variant="body1">Order Type: {order.orderType}</Typography>
+            <Typography variant="h6">Total: ${order.total.toFixed(2)}</Typography>
+            
             <Typography variant="body1">Created At: {new Date(order.createdAt).toLocaleString()}</Typography>
             <Typography variant="body1">Updated At: {new Date(order.updatedAt).toLocaleString()}</Typography>
-            <Typography variant="h6">Total: ${order.total.toFixed(2)}</Typography>
+            <Typography variant="body1" mt={1}>Status: {order.status}</Typography>
+
+           {order.orderFailureReason && ( <Typography variant="body1" my={1}>Status: {order.orderFailureReason}</Typography>)}
 
             {order.items.length > 0 && (<Box mt={2}>
               <Typography variant="h6">Items:</Typography>

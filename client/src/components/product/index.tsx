@@ -10,12 +10,7 @@ export type Product = {
   denominations: number[];
   media: {
     logo: string;
-    faceplates: [
-      {
-        name: string;
-        path: string;
-      }
-    ]
+    photo: string;
   }
   name: string;
   description: string;
@@ -54,7 +49,7 @@ const ProductList: React.FC = () => {
         {products.map(product => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
             <Card  style={{ minHeight: '700px', marginTop: 4 }}>
-              <img src={product.media.faceplates[0].path} alt={product.name} style={{ height: '200px', objectFit: 'contain', margin: "20px" }} />
+              <img src={product.media.photo} alt={product.name} style={{ height: '200px', objectFit: 'contain', margin: "20px" }} />
               <CardContent>
                 <img src={product.media.logo} alt={product.name} style={{ height: '30px', objectFit: 'contain' }} />
                 <Typography variant="h5" my={2}>{product.name}</Typography>
