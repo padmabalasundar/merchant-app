@@ -7,17 +7,17 @@ import OrderComponent from './OrderComponent';
 const ORDER_PAYLOAD = {
     items: [
       {
-        price: 15,
+        price: 5,
         productId: "PANERA",
         recipients: [
           {
             email: "testcydev_2@yahoo.com",
-            firstName: "Yahoo",
+            firstName: "Yahoo2",
             lastName: "User"
           }
         ],
-        // "deliveryScheduledAtTimestamp": "1718130600000",
-        message: "Happy Birthday !"
+        //deliveryScheduledAtTimestamp: "1718130600000",
+        message: "Best Wishes!"
       }
     ]
   };
@@ -28,8 +28,9 @@ const CreateOrder: React.FC = () => {
   const [order, setOrder] = useState<Order | null>(null);
 
   const handleCreateOrder = async () => {
-    setLoading(true);
     setMessage('');
+    setOrder(null);
+    setLoading(true);
   
     try {
       const response = await axios.post('http://localhost:5000/api/order/save', {
@@ -37,12 +38,14 @@ const CreateOrder: React.FC = () => {
       });
       console.log('handleCreateOrder:', response.data);
       const orderResponse = response.data;
-      if (orderResponse.status) {
-        setOrder(orderResponse.data.orderSummary as Order);
-        setMessage('Order created successfully!');
-      } else {
-        setMessage(orderResponse.message);
-      }
+      if (!orderResponse.status) {
+        setMessage(orderResponse.data.message);
+        return;
+       
+      } 
+      setOrder(orderResponse.data.orderSummary as Order);
+      setMessage('Order created successfully!');
+      return;
     } catch (error) {
       console.error('Error creating order:', error);
       setMessage(`An error occurred while creating the order!`);

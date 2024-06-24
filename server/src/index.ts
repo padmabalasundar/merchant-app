@@ -185,13 +185,16 @@ app.post('/api/order/save', async (req, res) => {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    console.log('save order:', {response: saveOrderResponse.data.data});
+    console.log('save order:', {response: saveOrderResponse.data});
     res.json(saveOrderResponse.data);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating order:', error);
-    res.status(500).json({ message: 'Error creating order', error });
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
   }
-
 });
 
 
