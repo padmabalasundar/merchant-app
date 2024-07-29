@@ -48,7 +48,7 @@ const CreateOrder: React.FC = () => {
     setLoading(true);
   
     try {
-      const response = await axios.post('http://localhost:5000/api/order/save', {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/api/order/save`, {
         ...ORDER_PAYLOAD
       });
       console.log('handleCreateOrder:', response.data);

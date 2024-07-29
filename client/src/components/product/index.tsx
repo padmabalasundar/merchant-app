@@ -33,6 +33,8 @@ export type Product = {
   description: string;
 };
 
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
+
 const ProductList = () => {
   const navigate = useNavigate();
   const [countries, setCountries] = useState<Country[]>([]);
@@ -52,7 +54,7 @@ const ProductList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/countries`
+        `${SERVER_BASE_URL}/api/countries`
       );
       setCountries(response.data);
       setLoading(false);
@@ -66,7 +68,7 @@ const ProductList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/products?cultureCode=en-${countryCode}`
+        `${SERVER_BASE_URL}/api/products?cultureCode=en-${countryCode}`
       );
       setProducts(response.data);
       setLoading(false);

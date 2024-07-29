@@ -18,6 +18,8 @@ export type Country = {
     languages: string[];
 };
 
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
+
 const CountryList = () => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,7 +32,7 @@ const CountryList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/countries`
+        `${SERVER_BASE_URL}/api/countries`
       );
       setCountries(response.data);
       setLoading(false);

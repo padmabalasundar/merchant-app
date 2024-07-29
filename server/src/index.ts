@@ -2,8 +2,11 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 
+import { config } from 'dotenv';
+config();
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors());
@@ -11,16 +14,9 @@ app.use(express.json());
 
 
 // Configurations for the API
-const BASE_URL = 'https://8yjjz0kd7l.execute-api.us-east-1.amazonaws.com/local';
-// const BASE_URL = 'https://api-dev.business.cardmoola.com';
-
-// dev env 
-// const API_KEY = 'XnlBohe6'; 
-// const API_SECRET = 'zSotrhjt3Bawuxfn3N_q3'; 
-
-// local env
-const API_KEY = 'RXXabsLA'; 
-const API_SECRET = 'v6TaoUrLx07xiIXT_8efr'; 
+const BASE_URL = process.env.BASE_URL;
+const API_KEY = process.env.API_KEY; 
+const API_SECRET = process.env.API_SECRET; 
 
 const AUTH_URL = `${BASE_URL}/auth/token`;
 const COUNTRIES_URL = `${BASE_URL}/countries`;

@@ -17,6 +17,7 @@ type RouteParams = {
   encodedId: string;
 };
 
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
 
 const ProductDetail: React.FC = () => {
   const routeParams = useParams<RouteParams>();
@@ -32,7 +33,7 @@ const ProductDetail: React.FC = () => {
   const fetchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/products/${encodedId}?cultureCode=${cultureCode}`
+        `${SERVER_BASE_URL}/api/products/${encodedId}?cultureCode=${cultureCode}`
       );
       setProduct(response.data);
       setLoading(false);

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Typography, CircularProgress } from '@mui/material';
 
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
+
 const FundBalance: React.FC = () => {
   const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -12,7 +14,7 @@ const FundBalance: React.FC = () => {
 
   const fetchBalance = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/fund/balance');
+      const response = await axios.get(`${SERVER_BASE_URL}/api/fund/balance`);
       setBalance(response.data.balance);
       setLoading(false);
     } catch (error) {

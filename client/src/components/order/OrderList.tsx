@@ -40,6 +40,8 @@ export type Recipient = {
     cultureCode: string; // en-US
     updatedAt: string; // ISO date string
   }
+
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
   
 const OrderList = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -51,7 +53,7 @@ const OrderList = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/orders');
+      const response = await axios.get(`${SERVER_BASE_URL}/api/orders`);
       const orders = response.data as Order[];
       const sortedOrders = orders.sort((a,b) => b.orderId - a.orderId);
       setOrders(sortedOrders);

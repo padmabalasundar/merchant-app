@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {  Box, Typography, CircularProgress } from '@mui/material';
+import { Container, Box, Typography, CircularProgress } from '@mui/material';
 import { Order } from './OrderList';
 import OrderComponent from "./OrderComponent";
 
@@ -13,12 +13,12 @@ const OrderDetail = () => {
 
   useEffect(() => {
     fetchOrder();
-  }, [orderId]);
+  },[]);
 
   const fetchOrder = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/orders/${orderId}`
+        `${process.env.REACT_APP_SERVER_BASE_URL}/api/orders/${orderId}`
       );
       setOrder(response.data);
       setLoading(false);
@@ -28,8 +28,13 @@ const OrderDetail = () => {
     }
   };
 
+  
   if (loading) {
-    return <CircularProgress />;
+    return (<Container>
+      <Box display="flex" justifyContent="center" alignItems="center" my={10}>
+        <CircularProgress />;
+      </Box>
+      </Container>)
   }
 
   if (!order) {
