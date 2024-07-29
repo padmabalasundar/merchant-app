@@ -5,10 +5,12 @@ import { Order } from './OrderList';
 import OrderComponent from './OrderComponent';
 
 const ORDER_PAYLOAD = {
+  cultureCode: 'en-DE',
+  currencyCode: 'EUR',
     items: [
       {
         price: 5,
-        productId: "ABERCROMB",
+        productId: "1073748", // Decathlon - Germany
         recipients: [
           {
             email: "testcydev_2@yahoo.com",

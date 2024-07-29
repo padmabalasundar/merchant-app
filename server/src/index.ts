@@ -14,17 +14,16 @@ app.use(express.json());
 const BASE_URL = 'https://8yjjz0kd7l.execute-api.us-east-1.amazonaws.com/local';
 // const BASE_URL = 'https://api-dev.business.cardmoola.com';
 
-// // dev env 
+// dev env 
 // const API_KEY = 'XnlBohe6'; 
 // const API_SECRET = 'zSotrhjt3Bawuxfn3N_q3'; 
-// const AUTH_URL = 'https://api-dev.business.cardmoola.com/auth/token';
-// const PRODUCTS_URL = 'https://api-dev.business.cardmoola.com/products';
-// const FUNDS_URL = 'https://api-dev.business.cardmoola.com/fund/balance'; 
 
-//local env
+// local env
 const API_KEY = 'RXXabsLA'; 
 const API_SECRET = 'v6TaoUrLx07xiIXT_8efr'; 
+
 const AUTH_URL = `${BASE_URL}/auth/token`;
+const COUNTRIES_URL = `${BASE_URL}/countries`;
 const PRODUCTS_URL = `${BASE_URL}/products`;
 const FUND_BALANCE_URL = `${BASE_URL}/fund/balance`;
 const FUND_ALERT_URL = `${BASE_URL}/fund/alert`;
@@ -45,13 +44,33 @@ const getAccessToken = async () => {
   
 };
 
+// fetch all supported countries
+app.get('/api/countries', async (req, res) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    const countriesResponse = await axios.get(`${COUNTRIES_URL}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    });
+    res.json(countriesResponse.data.data);
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+    res.status(500).json({ message: 'Error fetching countries', error });
+  }
+});
+
 // fetch products
 app.get('/api/products', async (req, res) => {
   try {
-    
+    const cultureCode = req.query.cultureCode as string;
     const accessToken = await getAccessToken();
 
-    const productsResponse = await axios.get(PRODUCTS_URL, {
+    const productsResponse = await axios.get(`${PRODUCTS_URL}?cultureCode=${cultureCode}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'ngrok-skip-browser-warning': 'true',
@@ -72,8 +91,9 @@ app.get('/api/products', async (req, res) => {
 app.get('/api/products/:encodedId', async (req, res) => {
   const { encodedId } = req.params;
   try {
+    const cultureCode = req.query.cultureCode as string;
     const accessToken = await getAccessToken();
-    const productResponse = await axios.get(`${PRODUCTS_URL}/${encodedId}`, {
+    const productResponse = await axios.get(`${PRODUCTS_URL}/${encodedId}?cultureCode=${cultureCode}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }

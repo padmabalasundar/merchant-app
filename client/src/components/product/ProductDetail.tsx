@@ -9,10 +9,18 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Product } from ".";
-import { parseDemoninations } from "../../utilities";
+import { getCurrencySymbol, parseDemoninations } from "../../utilities";
+
+type RouteParams = {
+  cultureCode: string;
+  encodedId: string;
+};
+
 
 const ProductDetail: React.FC = () => {
-  const { encodedId } = useParams<{ encodedId: string }>();
+  const routeParams = useParams<RouteParams>();
+  const encodedId = routeParams?.encodedId?.toUpperCase();
+  const cultureCode = routeParams?.cultureCode;
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -23,7 +31,7 @@ const ProductDetail: React.FC = () => {
   const fetchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/products/${encodedId}`
+        `http://localhost:5000/api/products/${encodedId}?cultureCode=${cultureCode}`
       );
       setProduct(response.data);
       setLoading(false);
@@ -56,7 +64,7 @@ const ProductDetail: React.FC = () => {
           <Typography variant="body2" color="textSecondary">
             {product.description}
           </Typography>
-          <Typography variant="h6">${parseDemoninations(product.denominations, product.denominationType)}</Typography>
+          <Typography variant="h6">{getCurrencySymbol(product.currencyCode)}{parseDemoninations(product.denominations, product.denominationType)}</Typography>
         </CardContent>
       </Card>
     </Container>

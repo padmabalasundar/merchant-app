@@ -7,19 +7,20 @@ export type Recipient = {
     email: string;
     firstName: string;
     lastName: string;
-    message: string;
     claimLink: string;
-    deliveryScheduledAtTimestamp: string;
+    // message: string;
+    // deliveryScheduledAtTimestamp: string;
   }
 
   export type OrderItem = {
     name: string;
-    price: string;
+    basePrice: string;
+    convertedPrice: string;
     productId: string;
     quantity: string;
     description: string;
     photo: string;
-    logo: string;
+    // logo: string;
     recipients: Recipient[];
   }
   
@@ -27,13 +28,16 @@ export type Recipient = {
     createdAt: string; // ISO date string
     items: OrderItem[];
     orderId: number;
-    status: "PENDING" | "COMPLETED" | "CANCELED" | 'SCHEDULED';
+    status: "PENDING" | "COMPLETED" | "CANCELED" | 'SCHEDULED' | 'FAIL';
     orderFailureReason: 'GIFT_CARD_ORDER_FAILURE' |
     'PAYMENT_FAILURE' |
     'FRAUD' |
     'INTERNAL_FAILURE';
     orderType: 'GIFT_CARD_PURCHASE' | 'GIFT_CARD_PURCHASE_WITH_API' | 'SUBSCRIPTION' | 'CARDMOOLA_FUNDS';
-    total: number;
+    baseTotal: number;
+    convertedTotal: number;
+    convertedCurrency: number;
+    cultureCode: string; // en-US
     updatedAt: string; // ISO date string
   }
   
