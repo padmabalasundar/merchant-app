@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
   Container,
+  Box,
   Typography,
   Card,
   CardContent,
@@ -42,7 +43,13 @@ const ProductDetail: React.FC = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Container>
+        <Box display="flex" justifyContent="center" alignItems="center" my={10}>
+          <CircularProgress />;
+        </Box>
+      </Container>
+    );
   }
 
   if (!product) {

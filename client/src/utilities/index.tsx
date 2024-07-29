@@ -1,6 +1,6 @@
 
 export const parseDemoninations = (denominations: number[], denominationType: string) => {
-    return denominationType === 'Fixed' ? denominations.toString().replaceAll(',', ' '): denominations.toString().replace(',', ' - ');
+    return denominationType === 'Fixed' ? denominations.toString().replaceAll(',', ', '): denominations.toString().replace(',', ' - ');
 }
 
 export const getCurrencySymbol = (currency: string | null) => {
