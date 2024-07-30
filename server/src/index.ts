@@ -1,8 +1,11 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import axios from 'axios';
 import cors from 'cors';
-
+import multer from 'multer';
+import FormData from 'form-data';
+import { Buffer } from 'buffer';
 import { config } from 'dotenv';
+
 config();
 
 const app = express();
@@ -10,8 +13,20 @@ const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
 
+// Increase the limit for JSON payload
+app.use(express.json({ limit: '50mb' }));
+
+// Increase the limit for URL-encoded payload
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+const upload = multer({ storage: multer.memoryStorage() }); // Use memory storage to handle file uploads
+
+interface MulterFile extends Express.Multer.File {
+  fieldname: string;
+  originalname: string;
+  buffer: Buffer;
+}
 
 // Configurations for the API
 const BASE_URL = process.env.BASE_URL;
@@ -205,6 +220,85 @@ app.post('/api/order/save', async (req, res) => {
     res.json(saveOrderResponse.data);
   } catch (error: any) {
     console.error('Error creating order:', error);
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// gift cards API endpoints
+
+// fetch all cards 
+app.get('/api/gift-card', async (req, res) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    const giftCardResponse = await axios.get(`${BASE_URL}/gift-card`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    });
+    res.json(giftCardResponse.data.data);
+  } catch (error) {
+    console.error('Error fetching gift cards:', error);
+    res.status(500).json({ message: 'Error fetching gift cards', error });
+  }
+});
+
+//fetch gift card by ID
+app.get('/api/gift-card/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const accessToken = await getAccessToken();
+    const productResponse = await axios.get(`${BASE_URL}/gift-card/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    res.json(productResponse.data.data);
+  } catch (error) {
+    console.error(`Error fetching gift card ${id}:`, error);
+    res.status(500).json({ message: `Error fetching gift card ${id}`, error });
+  }
+});
+
+// create card
+app.post('/api/gift-card', upload.any(), async (req: Request, res: Response) => {
+  try {
+  
+    const formData = new FormData();
+
+    // Append non-file fields
+    for (const key in req.body) {
+      if (Object.hasOwnProperty.call(req.body, key)) {
+        formData.append(key, req.body[key]);
+      }
+    }
+
+    // Append files
+    if (req.files) {
+      (req.files as MulterFile[]).forEach(file => {
+        formData.append(file.fieldname, file.buffer, file.originalname);
+      });
+    }
+    
+    const accessToken = await getAccessToken();
+
+    const response = await axios.post(`${BASE_URL}/gift-card`, formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        ...formData.getHeaders(),
+      }
+    });
+
+    res.json(response.data.data);
+  } catch (error: any) {
+    console.error('Error creating gift card:', error);
     if (error.status === 400) {
       res.status(400).json({ message: error.message });
       return;

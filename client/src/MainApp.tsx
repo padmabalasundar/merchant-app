@@ -8,9 +8,15 @@ import OrderList from './components/order/OrderList';
 import CreateOrder from './components/order/CreateOrder';
 import OrderDetail from './components/order/OrderDetail';
 import CountryList from './components/country';
+import GiftCardList from './components/gift-card';
+import GiftCardForm from './components/gift-card/GiftCardForm';
 
+type WelcomeProps = {
+    onSelectOption: (option: string) => void
+}
 
-const Welcome: React.FC<{ onSelectOption: (option: string) => void }> = ({ onSelectOption }) => {
+const Welcome = (props: WelcomeProps) => {
+    const {onSelectOption} = props;
     const navigate = useNavigate();
   
     return (
@@ -22,7 +28,7 @@ const Welcome: React.FC<{ onSelectOption: (option: string) => void }> = ({ onSel
     );
   };
   
-  const BuyBulkRoutes: React.FC = () => (
+  const BuyBulkRoutes = () => (
     <Routes>
       <Route path="/countries" element={<CountryList />} />
       <Route path="/products" element={<ProductList />} />
@@ -34,10 +40,11 @@ const Welcome: React.FC<{ onSelectOption: (option: string) => void }> = ({ onSel
     </Routes>
   );
   
-  const CreateSellRoutes: React.FC = () => (
+  const CreateSellRoutes = () => (
     <Routes>
-      <Route path="/fetch-cards" element={<CountryList />} />
-      <Route path="/create-cards" element={<CountryList />} />
+      <Route path="/fetch-cards" element={<GiftCardList />} />
+      <Route path="/gift-card/:id" element={<GiftCardList />} />
+      <Route path="/create-card" element={<GiftCardForm />} />
       <Route path="/send-to-customer" element={<CountryList />} />
       <Route path="/redeem" element={<CountryList />} />
       <Route path="/view-redemption/:cardId" element={<CountryList />} />
@@ -45,7 +52,7 @@ const Welcome: React.FC<{ onSelectOption: (option: string) => void }> = ({ onSel
   );
 
 
-  const MainApp: React.FC = () => {
+  const MainApp = () => {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const location = useLocation();
   
@@ -60,28 +67,32 @@ const Welcome: React.FC<{ onSelectOption: (option: string) => void }> = ({ onSel
     }, [location.pathname]);
   
     const renderToolbarButtons = () => {
-      if (selectedOption === 'buy-cards') {
-        return (
-          <>
-            <Button color="inherit" component={Link} to="/buy-cards/countries">Countries</Button>
-            <Button color="inherit" component={Link} to="/buy-cards/products">Products</Button>
-            <Button color="inherit" component={Link} to="/buy-cards/funds">Funds</Button>
-            <Button color="inherit" component={Link} to="/buy-cards/orders">Orders</Button>
-            <Button color="inherit" component={Link} to="/buy-cards/orders/save">Create Order</Button>
-          </>
-        );
-      } else if (selectedOption === 'create-sell') {
-        return (
-          <>
-            <Button color="inherit" component={Link} to="/create-sell/fetch-cards">Fetch Cards</Button>
-            <Button color="inherit" component={Link} to="/create-sell/create-cards">Create Cards</Button>
-            <Button color="inherit" component={Link} to="/create-sell/send-to-customer">Send to Customer</Button>
-            <Button color="inherit" component={Link} to="/create-sell/redeem">Redeem</Button>
-            <Button color="inherit" component={Link} to="/create-sell/view-redemption/:cardId">View Redemption</Button>
-          </>
-        );
-      }
-      return null;
+        switch(selectedOption) {
+            case 'buy-cards': {
+                return (
+                <>
+                    <Button color="inherit" component={Link} to="/buy-cards/countries">Countries</Button>
+                    <Button color="inherit" component={Link} to="/buy-cards/products">Products</Button>
+                    <Button color="inherit" component={Link} to="/buy-cards/funds">Funds</Button>
+                    <Button color="inherit" component={Link} to="/buy-cards/orders">Orders</Button>
+                    <Button color="inherit" component={Link} to="/buy-cards/orders/save">Create Order</Button>
+                </>
+                );
+            } 
+            case 'create-sell': {
+                return (
+                <>
+                    <Button color="inherit" component={Link} to="/create-sell/fetch-cards">Fetch Cards</Button>
+                    <Button color="inherit" component={Link} to="/create-sell/create-card">Create Card</Button>
+                    <Button color="inherit" component={Link} to="/create-sell/send-to-customer">Send to Customer</Button>
+                    <Button color="inherit" component={Link} to="/create-sell/redeem">Redeem</Button>
+                    <Button color="inherit" component={Link} to="/create-sell/view-redemption/:cardId">View Redemption</Button>
+                </>
+                );
+            }
+            default:
+                return null;
+        }
     };
   
     return (
