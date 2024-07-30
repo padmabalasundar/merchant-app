@@ -7,8 +7,7 @@ import {
   CardContent,
   Typography,
   CircularProgress,
-  Box,
-  MenuItem,
+  Box
 } from "@mui/material";
 
 export type Country = {
