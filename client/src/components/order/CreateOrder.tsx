@@ -9,7 +9,7 @@ const ORDER_PAYLOAD = {
   currencyCode: 'EUR',
     items: [
       {
-        price: 5,
+        price: 11,
         productId: "1073748", // Decathlon - Germany
         recipients: [
           {
@@ -19,7 +19,7 @@ const ORDER_PAYLOAD = {
           }
         ],
         // deliveryScheduledAtTimestamp: "1732905000000", // Fri Nov 29 2024 18:30:00 UTC
-        message: "Best Wishes!"
+        // message: "Best Wishes!"
       },
       // {
       //   price: 25,

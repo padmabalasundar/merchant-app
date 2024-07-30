@@ -55,6 +55,14 @@ const FundManagement: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (<Container>
+      <Box display="flex" justifyContent="center" alignItems="center" my={10}>
+        <CircularProgress />;
+      </Box>
+      </Container>)
+  }
+
   return (
     <Container>
       <Typography variant="h4">Fund Management</Typography>
