@@ -8,9 +8,11 @@ import {
   Typography,
   CircularProgress,
   Box,
+  Button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { parseDemoninations } from "../../utilities";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 export type GiftCard = {
   id: string;
@@ -33,6 +35,8 @@ const GiftCardList = () => {
   const navigate = useNavigate();
   const [giftCards, setGiftCards] = useState<GiftCard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [activeCard, setActiveCard] = useState<GiftCard | null>(null);
+  const [isDeleteModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     fetchGiftCards();
@@ -48,6 +52,35 @@ const GiftCardList = () => {
       console.error("Error fetching giftcards:", error);
       setLoading(false);
     }
+  };
+
+  const handleDeleteGiftCard = async () => {
+    try {
+      if (!activeCard){
+        return;
+      }
+      setLoading(true);
+      const response = await axios.delete(`${SERVER_BASE_URL}/api/gift-card/${activeCard?.id}`);
+      if (response.status === 200) {
+        setLoading(false);
+        await fetchGiftCards();
+        alert('Gift card deleted successfully!');
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('Error deleting gift card:', error);
+    }
+    closeDeleteModal();
+  };
+
+  const openDeleteModal = () => {
+    
+    setModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setActiveCard(null);
+    setModalOpen(false);
   };
 
   if (loading) {
@@ -70,7 +103,8 @@ const GiftCardList = () => {
       >
         <Typography variant="h5" my={2}>Gift Cards</Typography>
       </Box>
-      <Grid container spacing={3} style={{ marginTop: 20 }}>
+      <Grid container spacing={3} style={{ marginTop: 20, marginBottom: 20,
+                    justifyContent: "center"}}>
         {giftCards.length ? (
           giftCards.map((c) => (
             <Grid
@@ -120,9 +154,16 @@ const GiftCardList = () => {
                   <Typography variant="h6" my={1}>
                     ${parseDemoninations(c.priceDenominations, c.type)}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" mb={1}>
+                  <Typography variant="body2" color="textSecondary" mb={3}>
                     {c.description}
                   </Typography>
+
+                  <Button variant="outlined" color="primary" onClick={(e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    setActiveCard(c);
+                    openDeleteModal()}}>
+                    Delete
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>
@@ -139,6 +180,13 @@ const GiftCardList = () => {
             </Box>
           </Container>
         )}
+        <ConfirmDialog
+        open={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onConfirm={handleDeleteGiftCard}
+        title="Confirm Delete"
+        description="Are you sure you want to delete this gift card? This action cannot be undone."
+      />
       </Grid>
     </Container>
   );

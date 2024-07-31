@@ -348,6 +348,31 @@ app.put('/api/gift-card/:id', upload.any(), async (req: Request, res: Response) 
   }
 });
 
+
+// delete card
+app.delete('/api/gift-card/:id', upload.any(), async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+      
+    const accessToken = await getAccessToken();
+
+    const response = await axios.delete(`${BASE_URL}/gift-card/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    res.json(response.data.data);
+  } catch (error: any) {
+    console.error('Error deleting gift card:', error);
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
