@@ -1,90 +1,160 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import { Container, Button, CircularProgress, Typography } from '@mui/material';
-import { Order } from './OrderList';
-import OrderComponent from './OrderComponent';
-
-const ORDER_PAYLOAD = {
-  cultureCode: 'en-DE',
-  currencyCode: 'EUR',
-    items: [
-      {
-        price: 11,
-        productId: "1073748", // Decathlon - Germany
-        recipients: [
-          {
-            email: "testcydev_2@yahoo.com",
-            firstName: "Yahoo2",
-            lastName: "User"
-          }
-        ],
-        // deliveryScheduledAtTimestamp: "1732905000000", // Fri Nov 29 2024 18:30:00 UTC
-        // message: "Best Wishes!"
-      },
-      // {
-      //   price: 25,
-      //   productId: "1800PETSUP",
-      //   recipients: [
-      //     {
-      //       email: "testcydev@yahoo.com",
-      //       firstName: "Yahoo",
-      //       lastName: "User"
-      //     }
-      //   ],
-      //   // deliveryScheduledAtTimestamp: "1718130600000", // Tue Jun 11 2024 18:30:00 UTC
-      //   message: "Congrats!"
-      // }
-    ]
-  };
+import { Container, Button, Typography, Box, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const CreateOrder: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
-  const [order, setOrder] = useState<Order | null>(null);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    cultureCode: '',
+    currencyCode: '',
+    price: '',
+    productId: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+  });
 
-  const handleCreateOrder = async () => {
-    setMessage('');
-    setOrder(null);
-    setLoading(true);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const payload = {
+      cultureCode: formData.cultureCode,
+      currencyCode: formData.currencyCode,
+      items: [
+        {
+          price: Number(formData.price),
+          productId: formData.productId,
+          recipients: [
+            {
+              email: formData.email,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+            },
+          ],
+        },
+      ],
+    };
   
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/api/order/save`, {
-        ...ORDER_PAYLOAD
+        ...payload
       });
-      console.log('handleCreateOrder:', response.data);
       const orderResponse = response.data;
-      if (!orderResponse.status) {
-        setMessage(orderResponse.data.message);
-        return;
+      if (orderResponse.status) {
+        
+        alert('Order created successfully!');
+        navigate(`/buy-cards/orders`);
        
       } 
-      setOrder(orderResponse.data.orderSummary as Order);
-      setMessage('Order created successfully!');
-      return;
     } catch (error) {
       console.error('Error creating order:', error);
-      setMessage(`An error occurred while creating the order!`);
-    } finally {
-      setLoading(false);
-    }
+      
+    } 
   };
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom my={4}>New Order</Typography>
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleCreateOrder}
-        disabled={loading}
-      >
-        {loading ? <CircularProgress size={24} /> : 'Save Order'}
-      </Button>
-      {message && <Typography variant="body1" color="textSecondary" mt={2}>{message}</Typography>}
-      {order && (
-        <OrderComponent order={order} />
-      )}
-    </Container>
+    <Typography variant="h4" my={4}>Create Order</Typography>
+    <form onSubmit={handleSubmit}>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Culture Code"
+          name="cultureCode"
+          value={formData.cultureCode}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Currency Code"
+          name="currencyCode"
+          value={formData.currencyCode}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Price"
+          name="price"
+          type="number"
+          value={formData.price}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Product ID"
+          name="productId"
+          value={formData.productId}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Recipient Email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Recipient First Name"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          fullWidth
+          label="Recipient Last Name"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+        />
+      </Box>
+      <Box display="flex" justifyContent="flex-end" columnGap={2} mb={2}>
+        <Button
+          type="button"
+          variant="outlined"
+          color="primary"
+          onClick={() => navigate('/buy-cards/orders')}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          Create Order
+        </Button>
+      </Box>
+    </form>
+  </Container>
   );
 };
 

@@ -11,6 +11,7 @@ import CountryList from './components/country';
 import GiftCardList from './components/gift-card';
 import GiftCardForm from './components/gift-card/GiftCardForm';
 import SendGiftCard from './components/send-card';
+import SentCardList from './components/send-card/SentCardList';
 
 type WelcomeProps = {
     onSelectOption: (option: string) => void
@@ -47,7 +48,9 @@ const Welcome = (props: WelcomeProps) => {
       <Route path="/gift-card/:id" element={<GiftCardForm />} />
       <Route path="/create-card" element={<GiftCardForm />} />
       <Route path="/send-to-customer" element={<SendGiftCard />} />
+      <Route path="/view-incentives" element={<SentCardList />} />
       <Route path="/redeem" element={<CountryList />} />
+      <Route path="/validate" element={<CountryList />} />
       <Route path="/view-redemption/:cardId" element={<CountryList />} />
     </Routes>
   );
@@ -66,28 +69,34 @@ const Welcome = (props: WelcomeProps) => {
         setSelectedOption(null);
       }
     }, [location.pathname]);
+
+    const renderMenuItem = (link: string, name: string) => (
+      <Button color="inherit" style={{fontSize: 10}} component={Link} to={link}>{name}</Button>
+    )
   
     const renderToolbarButtons = () => {
         switch(selectedOption) {
             case 'buy-cards': {
                 return (
                 <>
-                    <Button color="inherit" component={Link} to="/buy-cards/countries">Countries</Button>
-                    <Button color="inherit" component={Link} to="/buy-cards/products">Products</Button>
-                    <Button color="inherit" component={Link} to="/buy-cards/funds">Funds</Button>
-                    <Button color="inherit" component={Link} to="/buy-cards/orders">Orders</Button>
-                    <Button color="inherit" component={Link} to="/buy-cards/orders/save">Create Order</Button>
+                  {renderMenuItem('/buy-cards/countries','Countries')}
+                  {renderMenuItem('/buy-cards/products','Products')}
+                  {renderMenuItem('/buy-cards/funds','Funds')}
+                  {renderMenuItem('/buy-cards/orders','Orders')}
+                  {renderMenuItem('/buy-cards/orders/save','Create Order')}
                 </>
                 );
             } 
             case 'create-sell': {
                 return (
                 <>
-                    <Button color="inherit" component={Link} to="/create-sell/fetch-cards">Fetch Cards</Button>
-                    <Button color="inherit" component={Link} to="/create-sell/create-card">Create Card</Button>
-                    <Button color="inherit" component={Link} to="/create-sell/send-to-customer">Send to Customer</Button>
-                    <Button color="inherit" component={Link} to="/create-sell/redeem">Redeem</Button>
-                    <Button color="inherit" component={Link} to="/create-sell/view-redemption/:cardId">View Redemption</Button>
+                  {renderMenuItem('/create-sell/fetch-cards','Fetch Cards')}
+                  {renderMenuItem('/create-sell/create-card','Create Card')}
+                  {renderMenuItem('/create-sell/send-to-customer','Send Card')}
+                  {renderMenuItem('/create-sell/view-incentives','Sent Cards')}
+                  {renderMenuItem('/create-sell/validate','Validate')}
+                  {renderMenuItem('/create-sell/redeem','Redeem Card')}
+                  {renderMenuItem('/create-sell/view-redemption/:cardId','View Redemptions')}
                 </>
                 );
             }
@@ -100,7 +109,7 @@ const Welcome = (props: WelcomeProps) => {
       <>
         <AppBar position="static">
           <Toolbar>
-            <Button color="inherit" component={Link} to="/">Home</Button>
+            {renderMenuItem('/','Home')}
             {renderToolbarButtons()}
           </Toolbar>
         </AppBar>

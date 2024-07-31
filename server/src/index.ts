@@ -395,6 +395,30 @@ app.post('/api/gift-card/send', async (req, res) => {
   }
 });
 
+// fetch all sent incentive cards 
+app.get('/api/gift-card/sent-cards', async (req, res) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    const incentivesResponse = await axios.get(`${BASE_URL}/gift-card/sent-cards`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    });
+    res.json(incentivesResponse.data.data);
+  } catch (error: any) {
+    console.error('Error fetching all sent cards:', error);
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
