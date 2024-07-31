@@ -373,6 +373,28 @@ app.delete('/api/gift-card/:id', upload.any(), async (req: Request, res: Respons
   }
 });
 
+// send card to customer
+app.post('/api/gift-card/send', async (req, res) => {
+  try {
+    const payload  = req.body; 
+    console.log('Send card:', {payload});
+    const accessToken = await getAccessToken();
+    const setAlertResponse = await axios.post(`${BASE_URL}/gift-card/send`, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    res.json(setAlertResponse.data.data);
+  } catch (error: any) {
+    console.error('Error sending card to customer:', error);
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

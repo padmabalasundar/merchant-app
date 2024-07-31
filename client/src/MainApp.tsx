@@ -10,6 +10,7 @@ import OrderDetail from './components/order/OrderDetail';
 import CountryList from './components/country';
 import GiftCardList from './components/gift-card';
 import GiftCardForm from './components/gift-card/GiftCardForm';
+import SendGiftCard from './components/send-card';
 
 type WelcomeProps = {
     onSelectOption: (option: string) => void
@@ -45,7 +46,7 @@ const Welcome = (props: WelcomeProps) => {
       <Route path="/fetch-cards" element={<GiftCardList />} />
       <Route path="/gift-card/:id" element={<GiftCardForm />} />
       <Route path="/create-card" element={<GiftCardForm />} />
-      <Route path="/send-to-customer" element={<CountryList />} />
+      <Route path="/send-to-customer" element={<SendGiftCard />} />
       <Route path="/redeem" element={<CountryList />} />
       <Route path="/view-redemption/:cardId" element={<CountryList />} />
     </Routes>
