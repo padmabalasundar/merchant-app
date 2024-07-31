@@ -123,7 +123,7 @@ const ProductList = () => {
       <Grid container spacing={3} style={{ marginTop: 20 }}>
         {products.length ? (
           products.map((product) => (
-            <Grid item xs={12} sm={6} lg={4} key={product.id} onClick={() => navigate(`/en-${countryCode}/products/${product.encodedId}`)}>
+            <Grid item xs={12} sm={6} lg={4} key={product.id} onClick={() => navigate(`/buy-cards/en-${countryCode}/products/${product.encodedId}`)}>
               <Card style={{ minHeight: "700px", marginTop: 4 }}>
                 <img
                   src={product.media.photo}

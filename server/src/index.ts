@@ -307,6 +307,46 @@ app.post('/api/gift-card', upload.any(), async (req: Request, res: Response) => 
   }
 });
 
+// update card
+app.put('/api/gift-card/:id', upload.any(), async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+  
+    const formData = new FormData();
+
+    // Append non-file fields
+    for (const key in req.body) {
+      if (Object.hasOwnProperty.call(req.body, key)) {
+        formData.append(key, req.body[key]);
+      }
+    }
+
+    // Append files
+    if (req.files) {
+      (req.files as MulterFile[]).forEach(file => {
+        formData.append(file.fieldname, file.buffer, file.originalname);
+      });
+    }
+    
+    const accessToken = await getAccessToken();
+
+    const response = await axios.put(`${BASE_URL}/gift-card/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        ...formData.getHeaders(),
+      }
+    });
+
+    res.json(response.data.data);
+  } catch (error: any) {
+    console.error('Error updating gift card:', error);
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

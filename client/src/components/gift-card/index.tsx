@@ -79,7 +79,7 @@ const GiftCardList = () => {
               sm={6}
               lg={4}
               key={c.id}
-              onClick={() => navigate(``)}
+              onClick={() => navigate(`/create-sell/gift-card/${c.id}`)}
             >
               <Card style={{ minHeight: "500px", marginTop: 4 }}>
                 <img

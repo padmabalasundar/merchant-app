@@ -43,7 +43,7 @@ const Welcome = (props: WelcomeProps) => {
   const CreateSellRoutes = () => (
     <Routes>
       <Route path="/fetch-cards" element={<GiftCardList />} />
-      <Route path="/gift-card/:id" element={<GiftCardList />} />
+      <Route path="/gift-card/:id" element={<GiftCardForm />} />
       <Route path="/create-card" element={<GiftCardForm />} />
       <Route path="/send-to-customer" element={<CountryList />} />
       <Route path="/redeem" element={<CountryList />} />
