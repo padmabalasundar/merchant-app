@@ -5,11 +5,14 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  Box
+  Box,
+  Button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { BarcodeCode, EmailFailureReason } from "../../types";
 import IncentiveCard from "./IncentiveCard";
+import IncentiveRedemptions from "./IncentiveRedemptions";
+import CommonDialog from "../common/CommonDialog";
 
 export type Incentive = {
     incentiveId?: number;
@@ -39,7 +42,6 @@ const SentCardList = () => {
   const navigate = useNavigate();
   const [incentives, setIncentives] = useState<Incentive[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  // const [activeCard, setActiveCard] = useState<Incentive | null>(null);
 
   useEffect(() => {
     fetchAllSentCards();
@@ -56,6 +58,8 @@ const SentCardList = () => {
       setLoading(false);
     }
   };
+
+
 
   if (loading) {
     return (
@@ -86,9 +90,7 @@ const SentCardList = () => {
               xs={12}
               sm={6}
               lg={4}
-              key={i.incentiveId}
-              onClick={() => navigate(`/create-sell/gift-card/${i.incentiveId}`)}
-            >
+              key={i.incentiveId}>
               <IncentiveCard incentive={i} />
             </Grid>
           ))

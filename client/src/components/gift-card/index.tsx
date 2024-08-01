@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { parseDemoninations } from "../../utilities";
-import ConfirmDialog from "../common/ConfirmDialog";
+import CommonDialog from "../common/CommonDialog";
 
 export type GiftCard = {
   id: string;
@@ -180,13 +180,15 @@ const GiftCardList = () => {
             </Box>
           </Container>
         )}
-        <ConfirmDialog
-        open={isDeleteModalOpen}
-        onClose={closeDeleteModal}
-        onConfirm={handleDeleteGiftCard}
-        title="Confirm Delete"
-        description="Are you sure you want to delete this gift card? This action cannot be undone."
-      />
+        <CommonDialog
+          open={isDeleteModalOpen}
+          confirmText="Delete"
+          title="Confirm Delete"
+          width="md"
+          description="Are you sure you want to delete this gift card? This action cannot be undone."
+          onClose={closeDeleteModal}
+          onConfirm={handleDeleteGiftCard}
+        />
       </Grid>
     </Container>
   );

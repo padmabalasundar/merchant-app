@@ -12,6 +12,7 @@ import GiftCardList from './components/gift-card';
 import GiftCardForm from './components/gift-card/GiftCardForm';
 import SendGiftCard from './components/send-card';
 import SentCardList from './components/send-card/SentCardList';
+import RedeemCard from './components/send-card/RedeemCard';
 
 type WelcomeProps = {
     onSelectOption: (option: string) => void
@@ -49,9 +50,7 @@ const Welcome = (props: WelcomeProps) => {
       <Route path="/create-card" element={<GiftCardForm />} />
       <Route path="/send-to-customer" element={<SendGiftCard />} />
       <Route path="/view-incentives" element={<SentCardList />} />
-      <Route path="/redeem" element={<CountryList />} />
-      <Route path="/validate" element={<CountryList />} />
-      <Route path="/view-redemption/:cardId" element={<CountryList />} />
+      <Route path="/redeem" element={<RedeemCard />} />
     </Routes>
   );
 
@@ -71,7 +70,7 @@ const Welcome = (props: WelcomeProps) => {
     }, [location.pathname]);
 
     const renderMenuItem = (link: string, name: string) => (
-      <Button color="inherit" style={{fontSize: 10}} component={Link} to={link}>{name}</Button>
+      <Button color="inherit" style={{fontSize: 12}} component={Link} to={link}>{name}</Button>
     )
   
     const renderToolbarButtons = () => {
@@ -94,9 +93,7 @@ const Welcome = (props: WelcomeProps) => {
                   {renderMenuItem('/create-sell/create-card','Create Card')}
                   {renderMenuItem('/create-sell/send-to-customer','Send Card')}
                   {renderMenuItem('/create-sell/view-incentives','Sent Cards')}
-                  {renderMenuItem('/create-sell/validate','Validate')}
                   {renderMenuItem('/create-sell/redeem','Redeem Card')}
-                  {renderMenuItem('/create-sell/view-redemption/:cardId','View Redemptions')}
                 </>
                 );
             }

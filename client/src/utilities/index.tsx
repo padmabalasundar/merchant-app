@@ -1,3 +1,4 @@
+import moment from "moment";
 
 export const parseDemoninations = (denominations: number[], denominationType: string) => {
     return (denominationType.toUpperCase() === 'FIXED') ? denominations.toString().replaceAll(',', ', ') : denominations.toString().replace(',', ' - ');
@@ -19,3 +20,7 @@ export const getCurrencySymbol = (currency: string | null) => {
             return '$';
     }
 };
+
+export const formatDate = (timeStamp: Date | string | null) => {
+    return  timeStamp ? moment(timeStamp).format('MM-DD-YYYY hh:mm a') : '-'
+}

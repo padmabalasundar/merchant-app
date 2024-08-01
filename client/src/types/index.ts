@@ -1,4 +1,6 @@
 
+export const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
+
 export interface BounceReason {
     type: 'Undetermined' | 'Permanent' | 'Transient';
     subType:
@@ -33,3 +35,14 @@ export type BarcodeCode = {
      */
     value: string;
 };
+
+export type IncentiveRedemption = {
+    incentiveId: number;
+    id:	number;
+    amount:	number;
+    totalExpenditure:	number;
+    balance:	number;
+    platformType:	 string;
+    redeemedAt:	string;
+    notes?:	string;
+}

@@ -27,7 +27,6 @@ const CreateOrder: React.FC = () => {
     e.preventDefault();
     const payload = {
       cultureCode: formData.cultureCode,
-      // currencyCode: formData.currencyCode,
       items: [
         {
           price: Number(formData.price),
@@ -54,9 +53,9 @@ const CreateOrder: React.FC = () => {
         navigate(`/buy-cards/orders`);
        
       } 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating order:', error);
-      
+      alert(`Error processing order!`);
     } 
   };
 

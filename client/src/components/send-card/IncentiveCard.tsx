@@ -1,6 +1,10 @@
-import { Card, CardContent, Box, Typography } from "@mui/material";
+import { useState } from "react";
+import { Card, CardContent, Box, Typography, Button } from "@mui/material";
 import { Incentive } from "./SentCardList";
 import moment from "moment";
+import CommonDialog from "../common/CommonDialog";
+import IncentiveRedemptions from "./IncentiveRedemptions";
+import { formatDate } from "../../utilities";
 
 
 type Props = {
@@ -8,6 +12,18 @@ type Props = {
 }
 const IncentiveCard = (props: Props) => {
     const {incentive} = props;
+    
+  // const [activeCard, setActiveCard] = useState<Incentive | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
     return (
         <Card style={{ minHeight: "500px", marginTop: 4 }}>
                 <img
@@ -44,7 +60,7 @@ const IncentiveCard = (props: Props) => {
                     Card Price: ${incentive.cardPrice} 
                   </Typography>
                   <Typography my={1}>
-                    Expiry Date: {incentive?.cardExpiryDate ? moment(incentive.cardExpiryDate).format('MM DD YYYY') : '-'} 
+                    Expiry Date: { formatDate(incentive?.cardExpiryDate)} 
                   </Typography>
                   <Typography my={1}>
                     Customer Email: {incentive.customerEmail} 
@@ -58,11 +74,29 @@ const IncentiveCard = (props: Props) => {
                   {incentive.message ? (<Typography my={1}>
                     Message: {incentive.message} 
                   </Typography>) : null}
-                  {incentive.deliveryScheduledAtTimestamp ? `${(moment(incentive.deliveryScheduledAtTimestamp).format('MM DD YYYY'))} UTC`  : null}
+                    {incentive.deliveryScheduledAtTimestamp ?(<Typography>Delivery Scheduled: {formatDate(incentive.deliveryScheduledAtTimestamp)} UTC</Typography> )  : null}
                   <Typography my={1}>
                     Status: {incentive.status} 
                   </Typography>
+
+                  
+              <Button variant="outlined" color="primary" onClick={(e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    // setActiveCard(i);
+                    openModal()}}
+              >
+                      View Redemption History
+              </Button>
                 </CardContent>
+                
+      <CommonDialog
+        open={isModalOpen}
+        onClose={closeModal}
+        closeText="Close"
+        title="Redemption History"
+        width="lg"
+        CustomComponent={<IncentiveRedemptions incentive={incentive} />}
+      />
               </Card>
     );
 };

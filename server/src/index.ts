@@ -400,7 +400,55 @@ app.get('/api/gift-card/sent-cards', async (req, res) => {
   try {
     const accessToken = await getAccessToken();
 
-    const incentivesResponse = await axios.get(`${BASE_URL}/gift-card/sent-cards`, {
+    const response = await axios.get(`${BASE_URL}/gift-card/sent-cards`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    });
+    res.json(response.data.data);
+  } catch (error: any) {
+    console.error('Error fetching sent-cards:', error);
+    if (error.status === 400) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// validate sent card by barcodeNumber
+app.post('/api/gift-card/validate', async (req, res) => {
+  try {
+    const payload  = req.body; 
+    console.log('Validate card:', {payload});
+    const accessToken = await getAccessToken();
+    const response = await axios.post(`${BASE_URL}/gift-card/validate`, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    res.json(response.data.data);
+  } catch (error: any) {
+    console.error('Error sending card to customer:', error);
+    if (error.status === 400) {
+      res.status(400).json({ status: false, message: error.message });
+      return;
+    }
+    res.status(500).json({ status: false, message: error.message });
+  }
+});
+
+
+// fetch all redemptions by incentive id
+app.get('/api/gift-card/redemptions/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const accessToken = await getAccessToken();
+
+    const incentivesResponse = await axios.get(`${BASE_URL}/gift-card/redemptions/${id}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'ngrok-skip-browser-warning': 'true',
