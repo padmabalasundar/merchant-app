@@ -7,7 +7,7 @@ const CreateOrder: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     cultureCode: '',
-    currencyCode: '',
+    // currencyCode: '',
     price: '',
     productId: '',
     email: '',
@@ -27,7 +27,7 @@ const CreateOrder: React.FC = () => {
     e.preventDefault();
     const payload = {
       cultureCode: formData.cultureCode,
-      currencyCode: formData.currencyCode,
+      // currencyCode: formData.currencyCode,
       items: [
         {
           price: Number(formData.price),
@@ -74,7 +74,7 @@ const CreateOrder: React.FC = () => {
           required
         />
       </Box>
-      <Box mb={2}>
+      {/* <Box mb={2}>
         <TextField
           fullWidth
           label="Currency Code"
@@ -83,7 +83,7 @@ const CreateOrder: React.FC = () => {
           onChange={handleChange}
           required
         />
-      </Box>
+      </Box> */}
       <Box mb={2}>
         <TextField
           fullWidth

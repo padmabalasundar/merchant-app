@@ -39,7 +39,7 @@ const SentCardList = () => {
   const navigate = useNavigate();
   const [incentives, setIncentives] = useState<Incentive[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeCard, setActiveCard] = useState<Incentive | null>(null);
+  // const [activeCard, setActiveCard] = useState<Incentive | null>(null);
 
   useEffect(() => {
     fetchAllSentCards();

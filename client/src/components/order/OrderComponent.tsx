@@ -1,6 +1,6 @@
 import React from 'react';
 import {  Box, Card, CardContent, Typography,  List, ListItem, ListItemText } from '@mui/material';
-import moment from 'moment';
+// import moment from 'moment';
 import { Order } from './OrderList';
 
 type OrderComponentProps = {
@@ -57,7 +57,7 @@ const OrderComponent = (props: OrderComponentProps) => {
                                     {recipient.deliveryScheduledAtTimestamp && (<Typography variant="body2">
                                       Delivery Scheduled At: {moment.utc(recipient.deliveryScheduledAtTimestamp).format('MMMM D, YYYY h:mm a')} UTC
                                     </Typography>)} */}
-                                    <Typography variant="body2">Claim Link: <a href={recipient.claimLink} target="_blank" rel="noopener noreferrer">Claim Here</a></Typography>
+                                    {recipient?.claimLink && (<Typography variant="body2">Claim Link: <a href={recipient.claimLink} target="_blank" rel="noopener noreferrer">Claim Here</a></Typography>)}
                                   </>
                                 }
                               />
