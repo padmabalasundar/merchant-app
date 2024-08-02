@@ -64,8 +64,8 @@ const RedeemCard = () => {
         console.log('Incentive details:', response.data);
       } catch (error: any) {
         setLoading(false);
-        console.error('Error validating sent card:', error.response.data.message);
-        alert('Gift Card is not valid!');
+        console.error("Error validating sent card:", error);
+        alert(`${error.response.data.message}`);
       }
   }
 

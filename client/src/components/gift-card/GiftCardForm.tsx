@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   Button,
   TextField,
@@ -29,29 +29,43 @@ type RouteParams = {
   id: string;
 };
 
+const DEFAULT_DATA: GiftCardDataType = {
+  name: "",
+  type: "VARIABLE",
+  cardType: "CONSUMER",
+  description: "",
+  priceDenominations: [] as number[],
+  expiryPeriod: 0,
+  isActive: true,
+  imageFile: null,
+  logoFile: null,
+}
+
 const GiftCardForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname;
   const routeParams = useParams<RouteParams>();
   const id = routeParams?.id;
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [giftCardData, setFormData] = useState<GiftCardDataType>({
-    name: "",
-    type: "VARIABLE",
-    cardType: "CONSUMER",
-    description: "",
-    priceDenominations: [] as number[],
-    expiryPeriod: 0,
-    isActive: true,
-    imageFile: null,
-    logoFile: null,
-  });
+  const [giftCardData, setFormData] = useState<GiftCardDataType>(DEFAULT_DATA);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   useEffect(() => {
+    if(pathname === '/create-sell/create-card') init();
+  },[pathname]);
+
+  useEffect(() => {
     if (id) getGiftCard(id);
   }, [id]);
+
+  const init = () => {
+    setFormData(DEFAULT_DATA);
+    setImagePreview(null);
+    setLogoPreview(null);
+  }
 
   const getGiftCard = async (id: string) => {
     setLoading(true);
@@ -159,7 +173,7 @@ const GiftCardForm = () => {
   return (
     <Container>
       <Typography variant="h4" my={4}>
-        Create Gift Card
+        {giftCardData?.id ? "Update " : "Create "} Gift Card
       </Typography>
       <form onSubmit={handleSubmit}>
         <Box mb={2}>
