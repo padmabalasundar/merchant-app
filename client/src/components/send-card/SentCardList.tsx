@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Container,
@@ -6,40 +6,35 @@ import {
   Typography,
   CircularProgress,
   Box,
-  Button
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { BarcodeCode, EmailFailureReason } from "../../types";
 import IncentiveCard from "./IncentiveCard";
-import IncentiveRedemptions from "./IncentiveRedemptions";
-import CommonDialog from "../common/CommonDialog";
 
 export type Incentive = {
-    incentiveId?: number;
-    giftCardId: number;
-    cardName: string;
-    cardPrice: number;
-    cardPhoto: string;
-    cardLogo: string;
-    cardExpiryDate: Date | null;
-    customerEmail: string;
-    customerName: string;
-    status?: 'SUCCESS' | 'PENDING' | 'SCHEDULED' | 'FAIL' | 'CANCELED';
-    message?: string;
-    barcodeCodes?: BarcodeCode[] | null;
-    failureReason?: EmailFailureReason;
-    deliveryScheduledAtTimestamp?: string | null;
-    deliveryAt?: string | null;
-    openedAt?: string | null;
-    clickedAt?: string | null;
-    createdAt?: string | null;
-    updatedAt?: string | null;
+  incentiveId?: number;
+  giftCardId: number;
+  cardName: string;
+  cardPrice: number;
+  cardPhoto: string;
+  cardLogo: string;
+  cardExpiryDate: Date | null;
+  customerEmail: string;
+  customerName: string;
+  status?: "SUCCESS" | "PENDING" | "SCHEDULED" | "FAIL" | "CANCELED";
+  message?: string;
+  barcodeCodes?: BarcodeCode[] | null;
+  failureReason?: EmailFailureReason;
+  deliveryScheduledAtTimestamp?: string | null;
+  deliveryAt?: string | null;
+  openedAt?: string | null;
+  clickedAt?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 };
 
 const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
 
 const SentCardList = () => {
-  const navigate = useNavigate();
   const [incentives, setIncentives] = useState<Incentive[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -50,7 +45,9 @@ const SentCardList = () => {
   const fetchAllSentCards = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${SERVER_BASE_URL}/api/gift-card/sent-cards`);
+      const response = await axios.get(
+        `${SERVER_BASE_URL}/api/gift-card/sent-cards`
+      );
       setIncentives(response.data);
       setLoading(false);
     } catch (error) {
@@ -58,8 +55,6 @@ const SentCardList = () => {
       setLoading(false);
     }
   };
-
-
 
   if (loading) {
     return (
@@ -73,24 +68,19 @@ const SentCardList = () => {
 
   return (
     <Container>
-      <Box
-        display="flex"
-        alignItems="flex-end"
-        justifyContent="center"
-        m={1}
-      >
-        <Typography variant="h5" my={2}>Gift Cards</Typography>
+      <Box display="flex" alignItems="flex-end" justifyContent="center" m={1}>
+        <Typography variant="h5" my={2}>
+          Gift Cards
+        </Typography>
       </Box>
-      <Grid container spacing={3} style={{ marginTop: 20, marginBottom: 20,
-                    justifyContent: "center"}}>
+      <Grid
+        container
+        spacing={3}
+        style={{ marginTop: 20, marginBottom: 20, justifyContent: "center" }}
+      >
         {incentives.length ? (
           incentives.map((i) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              lg={4}
-              key={i.incentiveId}>
+            <Grid item xs={12} sm={6} lg={4} key={i.incentiveId}>
               <IncentiveCard incentive={i} />
             </Grid>
           ))

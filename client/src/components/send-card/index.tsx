@@ -46,8 +46,9 @@ const SendGiftCard = () => {
         navigate(`/create-sell/fetch-cards`);
       }
       console.log('Gift card sent:', response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending gift card:', error);
+      alert(`Èrror! ${error.response.data.message}`);
     }
   };
 

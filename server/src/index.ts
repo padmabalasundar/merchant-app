@@ -379,12 +379,14 @@ app.post('/api/gift-card/send', async (req, res) => {
     const payload  = req.body; 
     console.log('Send card:', {payload});
     const accessToken = await getAccessToken();
-    const setAlertResponse = await axios.post(`${BASE_URL}/gift-card/send`, payload, {
+    const response = await axios.post(`${BASE_URL}/gift-card/send`, payload, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    res.json(setAlertResponse.data.data);
+    if (response.data.status) {
+      res.json(response.data.data);
+    }
   } catch (error: any) {
     console.error('Error sending card to customer:', error);
     if (error.status === 400) {
@@ -430,7 +432,41 @@ app.post('/api/gift-card/validate', async (req, res) => {
         Authorization: `Bearer ${accessToken}`
       }
     });
+    console.log('Validate incentive card:', response);
+    
+    if (!response.data.status) {
+      res.status(500).json({ status: false, message: response.data.message });
+    }
     res.json(response.data.data);
+    
+  } catch (error: any) {
+    console.error('Error sending card to customer:', error);
+    if (error.status === 400) {
+      res.status(400).json({ status: false, message: error.message });
+      return;
+    }
+    res.status(500).json({ status: false, message: error.message });
+  }
+});
+
+// validate sent card by barcodeNumber
+app.post('/api/gift-card/redeem', async (req, res) => {
+  try {
+    const payload  = req.body; 
+    console.log('Redeem card:', {payload});
+    const accessToken = await getAccessToken();
+    const response = await axios.post(`${BASE_URL}/gift-card/redeem`, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    console.log('Redeem card response:', response);
+    
+    if (!response.data.status) {
+      res.status(500).json({ status: false, message: response.data.message });
+    }
+    res.json(response.data.data);
+    
   } catch (error: any) {
     console.error('Error sending card to customer:', error);
     if (error.status === 400) {

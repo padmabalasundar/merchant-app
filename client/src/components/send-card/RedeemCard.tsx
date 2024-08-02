@@ -36,41 +36,37 @@ const RedeemCard = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${SERVER_BASE_URL}/api/gift-card/redeem-card`,
+        `${SERVER_BASE_URL}/api/gift-card/redeem`,
         formData
       );
       if (response.status === 200) {
+        setLoading(false);
         alert("Card redeemed successfully!");
-        navigate("/create-sell/view-incentives"); // Navigate to another page if needed
+        navigate("/create-sell/view-incentives");
       }
-    } catch (error) {
-      console.error("Error redeeming card:", error);
-    } finally {
+    } catch (error: any) {
       setLoading(false);
+      console.error("Error redeeming card:", error);
+      alert(`Error! ${error.response.data.message}`);
     }
   };
 
   const validateCard = async(barcodeNumber: string) => {
     if (!barcodeNumber) return;
+    setLoading(true);
     try {
         const response = await axios.post(`${SERVER_BASE_URL}/api/gift-card/validate`, { giftCardNumber: barcodeNumber});
+        
         if (response.status) {
+          setLoading(false);
           alert('Bardcode number is Valid!');
         }
         console.log('Incentive details:', response.data);
-      } catch (error) {
-        console.error('Error validating sent card:', error);
+      } catch (error: any) {
+        setLoading(false);
+        console.error('Error validating sent card:', error.response.data.message);
+        alert('Gift Card is not valid!');
       }
-  }
-
-  if (loading) {
-    return (
-      <Container>
-        <Box display="flex" justifyContent="center" alignItems="center" my={10}>
-          <CircularProgress />
-        </Box>
-      </Container>
-    );
   }
 
   return (
@@ -95,12 +91,13 @@ const RedeemCard = () => {
               fullWidth
               variant="contained"
               color="primary"
+              disabled={loading}
               onClick={async(e: React.MouseEvent) => {
                 e.stopPropagation();
                 await validateCard(formData.barcodeNumber);
               }}
             >
-              Validate Card
+              {loading && <CircularProgress />}&nbsp;Validate Card
             </Button>
           </Grid>
         </Grid>
@@ -145,8 +142,8 @@ const RedeemCard = () => {
           >
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Redeem Card
+          <Button type="submit" variant="contained" color="primary" disabled={loading}>
+            {loading && <CircularProgress />}&nbsp;Redeem Card
           </Button>
         </Box>
       </form>
