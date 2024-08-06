@@ -17,21 +17,7 @@ import {
   parseDemoninations,
 } from "../../utilities";
 import { Country } from "../country";
-
-export type Product = {
-  id: number;
-  encodedId: string;
-  cultureCode: string[];
-  currencyCode: string;
-  denominationType: string;
-  denominations: number[];
-  media: {
-    logo: string;
-    photo: string;
-  };
-  name: string;
-  description: string;
-};
+import { Product } from "../../types";
 
 const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
 
@@ -124,7 +110,7 @@ const ProductList = () => {
         {products.length ? (
           products.map((product) => (
             <Grid item xs={12} sm={6} lg={4} key={product.id} onClick={() => navigate(`/buy-cards/en-${countryCode}/products/${product.encodedId}`)}>
-              <Card style={{ minHeight: "700px", marginTop: 4 }}>
+              <Card style={{ minHeight: "240px", marginTop: 4 }}>
                 <img
                   src={product.media.photo}
                   alt={product.name}
@@ -136,18 +122,13 @@ const ProductList = () => {
                 />
                 <CardContent>
                   {/* <img src={product.media.logo} alt={product.name} style={{ height: '30px', objectFit: 'contain' }} /> */}
-                  <Typography variant="h5" my={2}>
+                  <Typography variant="h5" my={1}>
                     {product.name}
                   </Typography>
-
-                  
-
                   <Typography mb={2}>
                     Encoded Id: {product.encodedId}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {product.description}
-                  </Typography>
+                  
                   <Typography variant="h6" my={1}>
                     {getCurrencySymbol(product.currencyCode)}
                     {parseDemoninations(

@@ -46,3 +46,20 @@ export type IncentiveRedemption = {
     redeemedAt:	string;
     notes?:	string;
 }
+
+export type Product = {
+    id: number;
+    encodedId: string;
+    cultureCode: string[];
+    currencyCode: string;
+    denominationType: string;
+    denominations: number[];
+    media: {
+      logo: string;
+      photo: string;
+    };
+    name: string;
+    description: string;
+    terms: string;
+  };
+  

@@ -9,8 +9,8 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Product } from ".";
 import { getCurrencySymbol, parseDemoninations } from "../../utilities";
+import { Product } from "../../types";
 
 type RouteParams = {
   cultureCode: string;
@@ -72,7 +72,15 @@ const ProductDetail: React.FC = () => {
           <Typography variant="body2" color="textSecondary">
             {product.description}
           </Typography>
-          <Typography variant="h6">{getCurrencySymbol(product.currencyCode)}{parseDemoninations(product.denominations, product.denominationType)}</Typography>
+          <Typography variant="h6" my={2}>
+            {getCurrencySymbol(product.currencyCode)}{parseDemoninations(product.denominations, product.denominationType)}
+          </Typography>
+          <Typography color="textSecondary" my={1}>
+            Terms & Conditions:
+          </Typography>
+          <Typography>
+            {product.terms}
+          </Typography>
         </CardContent>
       </Card>
     </Container>
