@@ -56,7 +56,7 @@ const ProductDetail: React.FC = () => {
   if (!product) {
     return <Typography variant="h6">Product not found</Typography>;
   }
-
+console.log('details',{product})
   return (
     <Container>
       <Card style={{margin: '20px 0px'}}>
@@ -75,12 +75,16 @@ const ProductDetail: React.FC = () => {
           <Typography variant="h6" my={2}>
             {getCurrencySymbol(product.currencyCode)}{parseDemoninations(product.denominations, product.denominationType)}
           </Typography>
-          <Typography color="textSecondary" my={1}>
+          
+          <Typography color="textSecondary" variant="h6" my={1}>
             Terms & Conditions:
           </Typography>
-          <Typography>
-            {product.terms}
-          </Typography>
+          {product.translations.map((t, i) => (
+             <Typography my={2} key={t.lang} textAlign={t.lang === 'ar' ? 'right' : 'left'}>
+                {t.terms}
+             </Typography>
+          ))}
+         
         </CardContent>
       </Card>
     </Container>
