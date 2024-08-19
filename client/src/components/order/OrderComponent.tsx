@@ -1,6 +1,6 @@
 import React from 'react';
 import {  Box, Card, CardContent, Typography,  List, ListItem, ListItemText } from '@mui/material';
-import moment from 'moment';
+// import moment from 'moment';
 import { Order } from './OrderList';
 
 type OrderComponentProps = {
@@ -9,13 +9,16 @@ type OrderComponentProps = {
 
 const OrderComponent = (props: OrderComponentProps) => {
     const {order} = props;
+    const isUSOrder = order.cultureCode.split('-')[1] === 'US';
 
     return (
         <Card key={order.orderId} variant="outlined" style={{ margin: '20px 0px' }}>
           <CardContent>
             <Typography variant="h5">Order ID: {order.orderId}</Typography>
             <Typography variant="body1">Order Type: {order.orderType}</Typography>
-            <Typography variant="h6">Total: ${order.total.toFixed(2)}</Typography>
+            <Typography variant="body1">Culture Code: {order.cultureCode}</Typography>
+            <Typography variant="h6" mt={1}>USD Total: ${order.baseTotal.toFixed(2)}</Typography>
+            {!isUSOrder && (<Typography variant="h6" mb={1}>Converted Total: ${order.convertedTotal.toFixed(2)}</Typography>)}
             
             <Typography variant="body1">Created At: {new Date(order.createdAt).toLocaleString()}</Typography>
             <Typography variant="body1">Updated At: {new Date(order.updatedAt).toLocaleString()}</Typography>
@@ -32,7 +35,8 @@ const OrderComponent = (props: OrderComponentProps) => {
                         <img src={item.photo} alt={item.name} style={{ height: '30px', objectFit: 'contain' }} />
                         <Box ml={2}>
                           <Typography variant="h6">{item.name}</Typography>
-                          <Typography variant="body1">Price: ${item.price}</Typography>
+                          <Typography variant="body1">USD Price: ${item.basePrice}</Typography>
+                          {!isUSOrder && (<Typography variant="body1">Converted Price: ${item.convertedPrice}</Typography>)}
                           <Typography variant="body1">Quantity: {item.quantity}</Typography>
                           <Typography variant="body1">Description: {item.description}</Typography>
                         </Box>
@@ -49,11 +53,11 @@ const OrderComponent = (props: OrderComponentProps) => {
                                 secondary={
                                   <>
                                     <Typography variant="body2">Email: {recipient.email}</Typography>
-                                    <Typography variant="body2">Message: {recipient.message}</Typography>
+                                    {/* <Typography variant="body2">Message: {recipient.message}</Typography>
                                     {recipient.deliveryScheduledAtTimestamp && (<Typography variant="body2">
                                       Delivery Scheduled At: {moment.utc(recipient.deliveryScheduledAtTimestamp).format('MMMM D, YYYY h:mm a')} UTC
-                                    </Typography>)}
-                                    <Typography variant="body2">Claim Link: <a href={recipient.claimLink} target="_blank" rel="noopener noreferrer">Claim Here</a></Typography>
+                                    </Typography>)} */}
+                                    {recipient?.claimLink && (<Typography variant="body2">Claim Link: <a href={recipient.claimLink} target="_blank" rel="noopener noreferrer">Claim Here</a></Typography>)}
                                   </>
                                 }
                               />

@@ -3,16 +3,26 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
   Container,
+  Box,
   Typography,
   Card,
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Product } from ".";
-import { parseDemoninations } from "../../utilities";
+import { getCurrencySymbol, parseDemoninations } from "../../utilities";
+import { Product } from "../../types";
+
+type RouteParams = {
+  cultureCode: string;
+  encodedId: string;
+};
+
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
 
 const ProductDetail: React.FC = () => {
-  const { encodedId } = useParams<{ encodedId: string }>();
+  const routeParams = useParams<RouteParams>();
+  const encodedId = routeParams?.encodedId?.toUpperCase();
+  const cultureCode = routeParams?.cultureCode;
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -23,7 +33,7 @@ const ProductDetail: React.FC = () => {
   const fetchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/products/${encodedId}`
+        `${SERVER_BASE_URL}/api/products/${encodedId}?cultureCode=${cultureCode}`
       );
       setProduct(response.data);
       setLoading(false);
@@ -34,7 +44,13 @@ const ProductDetail: React.FC = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Container>
+        <Box display="flex" justifyContent="center" alignItems="center" my={10}>
+          <CircularProgress />;
+        </Box>
+      </Container>
+    );
   }
 
   if (!product) {
@@ -56,7 +72,15 @@ const ProductDetail: React.FC = () => {
           <Typography variant="body2" color="textSecondary">
             {product.description}
           </Typography>
-          <Typography variant="h6">${parseDemoninations(product.denominations, product.denominationType)}</Typography>
+          <Typography variant="h6" my={2}>
+            {getCurrencySymbol(product.currencyCode)}{parseDemoninations(product.denominations, product.denominationType)}
+          </Typography>
+          <Typography color="textSecondary" my={1}>
+            Terms & Conditions:
+          </Typography>
+          <Typography>
+            {product.terms}
+          </Typography>
         </CardContent>
       </Card>
     </Container>

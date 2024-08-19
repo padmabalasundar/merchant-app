@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Container, Button, Typography, TextField, CircularProgress, Box } from '@mui/material';
 
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
+
 const FundManagement: React.FC = () => {
   const [balance, setBalance] = useState<number | null>(null);
   const [alertAmount, setAlertAmount] = useState<number | null>(null);
@@ -12,7 +14,7 @@ const FundManagement: React.FC = () => {
   const handleFetchBalance = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/fund/balance');
+      const response = await axios.get(`${SERVER_BASE_URL}/api/fund/balance`);
       setBalance(response.data.balance);
       setLoading(false);
     } catch (error) {
@@ -25,7 +27,7 @@ const FundManagement: React.FC = () => {
   const handleFetchAlertAmount = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/fund/alert');
+      const response = await axios.get(`${SERVER_BASE_URL}/api/fund/alert`);
       setAlertAmount(response.data.thresholdAmount);
       setLoading(false);
     } catch (error) {
@@ -38,7 +40,7 @@ const FundManagement: React.FC = () => {
   const handleSetAlertAmount = async () => {
     setLoading(true);
     try {
-      const response = await axios.put('http://localhost:5000/api/fund/alert', { thresholdAmount: parseFloat(inputAlertAmount) });
+      const response = await axios.put(`${SERVER_BASE_URL}/api/fund/alert`, { thresholdAmount: parseFloat(inputAlertAmount) });
       if (!response.data.status) {
         setMessage('Error setting alert amount');
         setLoading(false);
@@ -52,6 +54,14 @@ const FundManagement: React.FC = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return (<Container>
+      <Box display="flex" justifyContent="center" alignItems="center" my={10}>
+        <CircularProgress />;
+      </Box>
+      </Container>)
+  }
 
   return (
     <Container>

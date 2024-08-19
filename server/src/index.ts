@@ -1,30 +1,31 @@
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
+import { config } from 'dotenv';
+import giftCardRoutes from './gift-card-route';
+
+config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+
+// Increase the limit for JSON payload
+app.use(express.json({ limit: '50mb' }));
+
+// Increase the limit for URL-encoded payload
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 
 // Configurations for the API
-const BASE_URL = 'https://8yjjz0kd7l.execute-api.us-east-1.amazonaws.com/local';
-// const BASE_URL = 'https://api-dev.business.cardmoola.com';
+export const BASE_URL = process.env.BASE_URL;
+const API_KEY = process.env.API_KEY; 
+const API_SECRET = process.env.API_SECRET; 
 
-// // dev env 
-// const API_KEY = 'XnlBohe6'; 
-// const API_SECRET = 'zSotrhjt3Bawuxfn3N_q3'; 
-// const AUTH_URL = 'https://api-dev.business.cardmoola.com/auth/token';
-// const PRODUCTS_URL = 'https://api-dev.business.cardmoola.com/products';
-// const FUNDS_URL = 'https://api-dev.business.cardmoola.com/fund/balance'; 
-
-//local env
-const API_KEY = 'RXXabsLA'; 
-const API_SECRET = 'v6TaoUrLx07xiIXT_8efr'; 
 const AUTH_URL = `${BASE_URL}/auth/token`;
+const COUNTRIES_URL = `${BASE_URL}/countries`;
 const PRODUCTS_URL = `${BASE_URL}/products`;
 const FUND_BALANCE_URL = `${BASE_URL}/fund/balance`;
 const FUND_ALERT_URL = `${BASE_URL}/fund/alert`;
@@ -32,7 +33,7 @@ const ORDER_URL = `${BASE_URL}/order`;
 
 
 // Function to get access token
-const getAccessToken = async () => {    
+export const getAccessToken = async () => {    
   // console.log('auth api:', {API_KEY, API_SECRET});
   const authResponse = await axios.post(AUTH_URL, {
     apiKey: API_KEY,
@@ -45,13 +46,33 @@ const getAccessToken = async () => {
   
 };
 
+// fetch all supported countries
+app.get('/api/countries', async (req, res) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    const countriesResponse = await axios.get(`${COUNTRIES_URL}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    });
+    res.json(countriesResponse.data.data);
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+    res.status(500).json({ message: 'Error fetching countries', error });
+  }
+});
+
 // fetch products
 app.get('/api/products', async (req, res) => {
   try {
-    
+    const cultureCode = req.query.cultureCode as string;
     const accessToken = await getAccessToken();
 
-    const productsResponse = await axios.get(PRODUCTS_URL, {
+    const productsResponse = await axios.get(`${PRODUCTS_URL}?cultureCode=${cultureCode}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'ngrok-skip-browser-warning': 'true',
@@ -72,8 +93,9 @@ app.get('/api/products', async (req, res) => {
 app.get('/api/products/:encodedId', async (req, res) => {
   const { encodedId } = req.params;
   try {
+    const cultureCode = req.query.cultureCode as string;
     const accessToken = await getAccessToken();
-    const productResponse = await axios.get(`${PRODUCTS_URL}/${encodedId}`, {
+    const productResponse = await axios.get(`${PRODUCTS_URL}/${encodedId}?cultureCode=${cultureCode}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -197,6 +219,8 @@ app.post('/api/order/save', async (req, res) => {
   }
 });
 
+// gift cards API endpoints
+app.use('/api/gift-card', giftCardRoutes );
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
