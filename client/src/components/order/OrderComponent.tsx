@@ -1,7 +1,7 @@
 import React from 'react';
 import {  Box, Card, CardContent, Typography,  List, ListItem, ListItemText } from '@mui/material';
-// import moment from 'moment';
 import { Order } from './OrderList';
+import { getCurrencySymbol } from '../../utilities';
 
 type OrderComponentProps = {
     order: Order;
@@ -18,7 +18,7 @@ const OrderComponent = (props: OrderComponentProps) => {
             <Typography variant="body1">Order Type: {order.orderType}</Typography>
             <Typography variant="body1">Culture Code: {order.cultureCode}</Typography>
             <Typography variant="h6" mt={1}>USD Total: ${order.baseTotal.toFixed(2)}</Typography>
-            {!isUSOrder && (<Typography variant="h6" mb={1}>Converted Total: ${order.convertedTotal.toFixed(2)}</Typography>)}
+            {!isUSOrder && (<Typography variant="h6" mb={1}>Total: {getCurrencySymbol(order.convertedCurrency)}{order.convertedTotal.toFixed(2)}</Typography>)}
             
             <Typography variant="body1">Created At: {new Date(order.createdAt).toLocaleString()}</Typography>
             <Typography variant="body1">Updated At: {new Date(order.updatedAt).toLocaleString()}</Typography>
@@ -36,7 +36,7 @@ const OrderComponent = (props: OrderComponentProps) => {
                         <Box ml={2}>
                           <Typography variant="h6">{item.name}</Typography>
                           <Typography variant="body1">USD Price: ${item.basePrice}</Typography>
-                          {!isUSOrder && (<Typography variant="body1">Converted Price: ${item.convertedPrice}</Typography>)}
+                          {!isUSOrder && (<Typography variant="body1">Price: {getCurrencySymbol(order.convertedCurrency)}{item.convertedPrice}</Typography>)}
                           <Typography variant="body1">Quantity: {item.quantity}</Typography>
                           <Typography variant="body1">Description: {item.description}</Typography>
                         </Box>

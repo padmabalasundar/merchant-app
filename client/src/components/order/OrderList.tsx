@@ -36,7 +36,7 @@ export type Recipient = {
     orderType: 'GIFT_CARD_PURCHASE' | 'GIFT_CARD_PURCHASE_WITH_API' | 'SUBSCRIPTION' | 'CARDMOOLA_FUNDS';
     baseTotal: number;
     convertedTotal: number;
-    convertedCurrency: number;
+    convertedCurrency: string;
     cultureCode: string; // en-US
     updatedAt: string; // ISO date string
   }
