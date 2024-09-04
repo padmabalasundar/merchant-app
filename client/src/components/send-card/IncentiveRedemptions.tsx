@@ -34,7 +34,8 @@ const columns = [
         try{
             setLoading(true);
             const response = await axios.get(`${SERVER_BASE_URL}/api/gift-card/redemptions/${incentive?.incentiveId}`);
-            setRedemptions(response.data);
+            const redemptions = (response.data as IncentiveRedemption[] || []).map((r) => ({...r, amount: r.amount / 100, totalExpenditure: r.totalExpenditure / 100 }))
+            setRedemptions(redemptions);
             setLoading(false);
         }catch(e: any) {
             setLoading(false);
