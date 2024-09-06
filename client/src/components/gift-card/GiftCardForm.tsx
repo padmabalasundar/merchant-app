@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { GiftCard } from ".";
+import { getCurrencySymbol } from "../../utilities";
 
 const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
 
@@ -35,6 +36,7 @@ const DEFAULT_DATA: GiftCardDataType = {
   cardType: "CONSUMER",
   description: "",
   priceDenominations: [] as number[],
+  currencyCode: "USD",
   expiryPeriod: 0,
   isActive: true,
   imageFile: null,
@@ -224,7 +226,17 @@ const GiftCardForm = () => {
             required
           />
         </Box>
-        <Box mb={2}>
+        <Box display="flex" justifyContent="space-between" columnGap={1} mb={2}>
+          <TextField
+            fullWidth
+            label="Currency Code"
+            name="currencyCode"
+            disabled={Boolean(giftCardData?.id)}
+            value={giftCardData.currencyCode}
+            onChange={handleChange}
+            required
+          />
+          
           <TextField
             fullWidth
             label="Price Denominations (comma separated)"

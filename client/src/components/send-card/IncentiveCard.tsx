@@ -3,7 +3,7 @@ import { Card, CardContent, Box, Typography, Button } from "@mui/material";
 import { Incentive } from "./SentCardList";
 import CommonDialog from "../common/CommonDialog";
 import IncentiveRedemptions from "./IncentiveRedemptions";
-import { formatDate } from "../../utilities";
+import { formatDate, getCurrencySymbol } from "../../utilities";
 
 type Props = {
   incentive: Incentive;
@@ -49,7 +49,7 @@ const IncentiveCard = (props: Props) => {
         </Box>
         <Typography my={1}>Incentive Id: {incentive.incentiveId}</Typography>
         <Typography my={1}>Gift Card Id: {incentive.giftCardId}</Typography>
-        <Typography my={1}>Card Price: ${incentive.cardPrice}</Typography>
+        <Typography my={1}>Card Price: {getCurrencySymbol(incentive.currencyCode)}{incentive.cardPrice}</Typography>
         <Typography my={1}>
           Expiry Date: {formatDate(incentive?.cardExpiryDate)}
         </Typography>

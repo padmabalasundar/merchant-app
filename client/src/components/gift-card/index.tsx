@@ -11,7 +11,7 @@ import {
   Button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { parseDemoninations } from "../../utilities";
+import { getCurrencySymbol, parseDemoninations } from "../../utilities";
 import CommonDialog from "../common/CommonDialog";
 
 export type GiftCard = {
@@ -23,6 +23,7 @@ export type GiftCard = {
   image: string;
   logo: string;
   priceDenominations: number[];
+  currencyCode: "USD" | "CAD" | "EUR" | "GBP";
   expiryPeriod: number; // in months
   isActive: boolean;
   createdAt: string;
@@ -141,7 +142,7 @@ const GiftCardList = () => {
                     <Typography variant="h5">{c.name}</Typography>
                   </Box>
                   <Typography my={1}>
-                    Gift ard Id: {c.id} 
+                    Gift card Id: {c.id} 
                   </Typography>
                   <Typography mb={1}>
                     Expiry: {c.cardType === 'CONSUMER' ? `${c.expiryPeriod / 12}  years` : `${c.expiryPeriod} months`} 
@@ -152,7 +153,7 @@ const GiftCardList = () => {
                     Status: {c.isActive ? "Active" : "Inactive"}
                   </Typography>
                   <Typography variant="h6" my={1}>
-                    ${parseDemoninations(c.priceDenominations, c.type)}
+                  {getCurrencySymbol(c.currencyCode)}{parseDemoninations(c.priceDenominations, c.type)}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" mb={3}>
                     {c.description}

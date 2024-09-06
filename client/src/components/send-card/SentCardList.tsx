@@ -15,6 +15,7 @@ export type Incentive = {
   giftCardId: number;
   cardName: string;
   cardPrice: number;
+  currencyCode: string;
   cardPhoto: string;
   cardLogo: string;
   cardExpiryDate: Date | null;

@@ -60,6 +60,7 @@ export type Product = {
     };
     name: string;
     description: string;
+    terms: string;
     translations: [
       {
           lang: string;

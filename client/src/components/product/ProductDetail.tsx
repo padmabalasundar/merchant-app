@@ -79,12 +79,15 @@ console.log('details',{product})
           <Typography color="textSecondary" variant="h6" my={1}>
             Terms & Conditions:
           </Typography>
-          {product.translations.map((t, i) => (
+          {product.translations.length ? product.translations.map((t, i) => (
              <Typography my={2} key={t.lang} textAlign={t.lang === 'ar' ? 'right' : 'left'}>
                 {t.terms}
              </Typography>
-          ))}
-         
+          )) : product.terms ?  (
+            <Typography my={2} >
+               {product.terms}
+            </Typography>
+         ) : null}
         </CardContent>
       </Card>
     </Container>
