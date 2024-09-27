@@ -13,6 +13,7 @@ import GiftCardForm from './components/gift-card/GiftCardForm';
 import SendGiftCard from './components/send-card';
 import SentCardList from './components/send-card/SentCardList';
 import RedeemCard from './components/send-card/RedeemCard';
+import Categories from './components/categories';
 
 type WelcomeProps = {
     onSelectOption: (option: string) => void
@@ -35,6 +36,7 @@ const Welcome = (props: WelcomeProps) => {
     <Routes>
       <Route path="/countries" element={<CountryList />} />
       <Route path="/products" element={<ProductList />} />
+      <Route path="/products/categories" element={<Categories />} />
       <Route path="/:cultureCode/products/:encodedId" element={<ProductDetail />} />
       <Route path="/funds" element={<FundManagement />} />
       <Route path="/orders" element={<OrderList />} />
@@ -80,6 +82,7 @@ const Welcome = (props: WelcomeProps) => {
                 <>
                   {renderMenuItem('/buy-cards/countries','Countries')}
                   {renderMenuItem('/buy-cards/products','Products')}
+                  {renderMenuItem('/buy-cards/products/categories','Categories')}
                   {renderMenuItem('/buy-cards/funds','Funds')}
                   {renderMenuItem('/buy-cards/orders','Orders')}
                   {renderMenuItem('/buy-cards/orders/save','Create Order')}

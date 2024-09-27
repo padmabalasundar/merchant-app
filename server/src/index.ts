@@ -59,6 +59,7 @@ app.get('/api/countries', async (req, res) => {
         Accept: 'application/json',
       }
     });
+    // console.log('countries:', {response: countriesResponse.data.data});
     res.json(countriesResponse.data.data);
   } catch (error) {
     console.error('Error fetching countries:', error);
@@ -88,6 +89,31 @@ app.get('/api/products', async (req, res) => {
     res.status(500).json({ message: 'Error fetching products', error });
   }
 });
+
+
+// fetch product categories
+app.get('/api/products/get-categories', async (req, res) => {
+  try {
+    const countryCode = req.query.countryCode as string;
+    const accessToken = await getAccessToken();
+
+    const categoriesResponse = await axios.get(`${PRODUCTS_URL}/get-categories/?countryCode=${countryCode}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    });
+
+    // console.log('categoriesResponse:',categoriesResponse );
+    res.json(categoriesResponse.data.data);
+  } catch (error) {
+    console.error('Error fetching product categories:', error);
+    res.status(500).json({ message: 'Error fetching product categories', error });
+  }
+});
+
 
 //fetch product by ID
 app.get('/api/products/:encodedId', async (req, res) => {

@@ -15,6 +15,11 @@ export type Country = {
     name: string;
     currency: string;
     languages: string[];
+    emojiU: string;
+    translations: {
+      name: string;
+      cultureCode: string;
+    }[];
 };
 
 const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
@@ -60,7 +65,11 @@ const CountryList = () => {
         </Typography>
       <Grid container spacing={3} style={{ marginTop: 20 }}>
         {countries.length ? (
-          countries.map((country) => (
+          countries.map((country) =>{
+            const translationString = country.translations
+            .map(t => ` ${t.name} - cultureCode: ${t.cultureCode}`)
+            .join(', ');
+            return (
             <Grid item xs={12} sm={6} lg={4} key={country.shortName}>
               <Card style={{ minHeight: "240px", marginTop: 4 }}>
                 
@@ -77,11 +86,17 @@ const CountryList = () => {
                   <Typography mb={2}>
                     Languages: {country.languages.toString()}
                   </Typography>
+                  <Typography mb={2}>
+                    EmojiU: {country.emojiU}
+                  </Typography>
+                  <Typography mb={2}>
+                    Translations: {translationString}
+                  </Typography>
                   
                 </CardContent>
               </Card>
             </Grid>
-          ))
+          )})
         ) : (
           <Typography>No countries available</Typography>
         )}
